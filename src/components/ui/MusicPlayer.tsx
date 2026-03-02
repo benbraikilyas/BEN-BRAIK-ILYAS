@@ -21,42 +21,86 @@ export default function MusicPlayer({ className = "fixed bottom-8 left-8 z-50", 
     const [isPlaying, setIsPlaying] = useState(false);
     const [player, setPlayer] = useState<any>(null);
 
+    const playerRef = useRef<HTMLDivElement>(null);
+
     useEffect(() => {
-        // Load YouTube API
-        const loadYT = () => {
-            if (!window.YT) {
-                const tag = document.createElement("script");
-                tag.src = "https://www.youtube.com/iframe_api";
-                const firstScriptTag = document.getElementsByTagName("script")[0];
-                if (firstScriptTag && firstScriptTag.parentNode) {
-                    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                }
-            } else if (window.YT && window.YT.Player) {
-                initPlayer();
-            }
-        };
+        let isMounted = true;
+        let playerInstance: any = null;
+        let initTimeout: NodeJS.Timeout;
 
         const initPlayer = () => {
-            new window.YT.Player("youtube-player", {
+            if (!isMounted || !window.YT || !window.YT.Player || !playerRef.current) return;
+
+            // Prevent multiple iframes
+            if (playerRef.current.querySelector('iframe')) return;
+
+            console.log("Initializing YouTube Player...");
+
+            playerInstance = new window.YT.Player(playerRef.current, {
                 height: "0",
                 width: "0",
                 videoId: SITE_CONFIG.youtubeId,
+                host: "https://www.youtube-nocookie.com",
                 playerVars: {
                     autoplay: 0,
                     controls: 0,
                     loop: 1,
                     playlist: SITE_CONFIG.youtubeId,
+                    origin: window.location.origin,
+                    enablejsapi: 1,
+                    modestbranding: 1,
+                    rel: 0,
                 },
                 events: {
                     onReady: (event: any) => {
-                        setPlayer(event.target);
+                        if (isMounted) {
+                            console.log("YouTube Player Ready");
+                            setPlayer(event.target);
+                        }
                     },
+                    onError: (e: any) => {
+                        console.error("YouTube Player Error:", e.data);
+                    }
                 },
             });
         };
 
-        window.onYouTubeIframeAPIReady = initPlayer;
+        const loadYT = () => {
+            if (window.YT && window.YT.Player) {
+                // Already loaded, but wait a bit for DOM stability
+                initTimeout = setTimeout(initPlayer, 500);
+            } else {
+                // Not loaded yet
+                if (!document.getElementById("youtube-api-script")) {
+                    const tag = document.createElement("script");
+                    tag.id = "youtube-api-script";
+                    tag.src = "https://www.youtube.com/iframe_api";
+                    const firstScriptTag = document.getElementsByTagName("script")[0];
+                    if (firstScriptTag && firstScriptTag.parentNode) {
+                        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+                    }
+                }
+
+                // Global callback for the script
+                const oldCallback = window.onYouTubeIframeAPIReady;
+                window.onYouTubeIframeAPIReady = () => {
+                    if (oldCallback) oldCallback();
+                    if (isMounted) {
+                        initTimeout = setTimeout(initPlayer, 500);
+                    }
+                };
+            }
+        };
+
         loadYT();
+
+        return () => {
+            isMounted = false;
+            if (initTimeout) clearTimeout(initTimeout);
+            if (playerInstance && playerInstance.destroy) {
+                playerInstance.destroy();
+            }
+        };
     }, []);
 
     const togglePlay = () => {
@@ -73,7 +117,15 @@ export default function MusicPlayer({ className = "fixed bottom-8 left-8 z-50", 
 
     return (
         <>
-            <div id="youtube-player" style={{ display: "none" }} />
+            {/* 
+                Use an invisible but present container rather than display:none.
+                This ensures the Iframe API can safely execute postMessage calls.
+            */}
+            <div 
+                ref={playerRef} 
+                className="fixed bottom-0 left-0 w-0 h-0 opacity-0 pointer-events-none -z-50" 
+                aria-hidden="true"
+            />
 
             <div className={className}>
                 <motion.button

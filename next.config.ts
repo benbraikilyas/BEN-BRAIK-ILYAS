@@ -33,10 +33,12 @@ const securityHeaders = [
     key: 'Content-Security-Policy',
     value: `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com;
+      script-src 'self' 'unsafe-inline' 'unsafe-eval' https://va.vercel-scripts.com https://*.youtube.com https://*.ytimg.com;
       style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-      img-src 'self' blob: data: https://images.unsplash.com;
-      font-src 'self' https://fonts.gstatic.com;
+      img-src 'self' blob: data: https://images.unsplash.com https://*.youtube.com https://*.ytimg.com;
+      font-src 'self' https://fonts.gstatic.com https://r2cdn.perplexity.ai;
+      frame-src 'self' https://*.youtube.com https://*.youtube-nocookie.com;
+      connect-src 'self' https://*.youtube.com https://*.google.com https://fonts.gstatic.com;
       object-src 'none';
       base-uri 'self';
       form-action 'self';

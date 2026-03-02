@@ -74,6 +74,7 @@ export default function Navbar() {
                             fill
                             className="object-contain"
                             priority
+                            sizes="(max-width: 768px) 48px, 56px"
                         />
                     </div>
                     <span className="font-display text-xl md:text-2xl tracking-widest text-foreground group-hover:text-accent transition-colors duration-300">

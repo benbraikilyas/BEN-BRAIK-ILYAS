@@ -75,14 +75,15 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} ${bebasNeue.variable} ${jetbrainsMono.variable} antialiased selection:bg-accent selection:text-background`}
+        className={`${inter.variable} ${bebasNeue.variable} ${jetbrainsMono.variable} antialiased selection:bg-accent selection:text-background relative`}
       >
         <Providers>
-          <div className="grain-overlay" />
-          <Cursor />
-          {children}
-          {/* Add gradual blur at the bottom of the page */}
-          <GradualBlur position="bottom" height="6rem" strength={2} />
+          <main className="relative min-h-screen">
+            <div className="grain-overlay" />
+            <Cursor />
+            {children}
+            <GradualBlur position="bottom" height="6rem" strength={2} />
+          </main>
         </Providers>
       </body>
     </html>
