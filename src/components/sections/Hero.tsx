@@ -15,7 +15,7 @@ export default function Hero() {
             <div className="max-w-[1400px] mx-auto w-full mb-12 lg:mb-20">
                 <div className="grid grid-cols-1 lg:grid-cols-2 lg:items-center gap-16 lg:gap-32 xl:gap-48">
                     {/* Left Column: Text */}
-                    <div className="max-w-2xl lg:pl-12">
+                    <div className="max-w-2xl lg:pl-12 will-change-transform">
                         {/* Full name display */}
                         <div className="mb-6">
                             <motion.p
@@ -51,7 +51,7 @@ export default function Hero() {
 
                     {/* Right Column: Video */}
                     <motion.div
-                        className="flex justify-center lg:justify-end lg:pr-12 xl:pr-32"
+                        className="flex justify-center lg:justify-end lg:pr-12 xl:pr-32 transform-gpu will-change-transform"
                         initial={{ opacity: 0, scale: 0.9, filter: 'blur(30px)' }}
                         animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
                         transition={{ duration: 2, delay: 3.2, ease: [0.16, 1, 0.3, 1] }}
@@ -93,7 +93,7 @@ export default function Hero() {
                         transition={{ duration: 1, delay: 4.5 }}
                     >
                         <motion.div
-                            className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-accent hover:border-accent transition-all duration-300 group cursor-pointer"
+                            className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-accent hover:border-accent transition-all duration-300 group cursor-pointer will-change-transform"
                             animate={{ y: [0, 8, 0] }}
                             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
                             onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}

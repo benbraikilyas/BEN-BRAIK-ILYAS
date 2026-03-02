@@ -5,7 +5,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import ScrollReveal from "@/components/ui/ScrollReveal";
+import Image from "next/image";
 import Spaceship from "@/components/ui/Spaceship";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -168,7 +168,7 @@ export default function Works() {
             <div className="relative h-screen w-full flex flex-col items-center z-20">
 
                 {/* Spaceship Container */}
-                <div ref={shipRef} className="relative z-10 pt-[2vh]">
+                <div ref={shipRef} className="relative z-10 pt-[2vh] will-change-transform">
                     {/* The Light Beam (Now behind the ship) */}
                     <div
                         ref={beamRef}
@@ -191,15 +191,18 @@ export default function Works() {
                         {PROJECTS.map((project, index) => (
                             <div
                                 key={project.id}
-                                className={`project-card-${index} absolute w-full max-w-5xl opacity-0 pointer-events-none transform-gpu`}
+                                className={`project-card-${index} absolute w-full max-w-5xl opacity-0 pointer-events-none transform-gpu will-change-[transform,opacity,filter]`}
                             >
                                 <div className="grid grid-cols-1 lg:grid-cols-[1.3fr_0.7fr] gap-8 lg:gap-12 items-center bg-black/60 backdrop-blur-xl rounded-[2.5rem] p-6 md:p-8 border border-white/10 shadow-[0_0_80px_rgba(0,0,0,0.8)] overflow-hidden group">
                                     {/* Image Container - Full Visibility */}
                                     <div className="relative aspect-[16/9] lg:aspect-auto lg:h-[460px] rounded-2xl overflow-hidden border border-white/10 group bg-black/20">
-                                        <img
+                                        <Image
                                             src={project.image}
                                             alt={`${project.title} - ${project.category} project by Ben Braik Ilyas`}
-                                            className="w-full h-full object-contain transition-transform duration-1000 group-hover:scale-105"
+                                            fill
+                                            className="object-contain transition-transform duration-1000 group-hover:scale-105"
+                                            priority={index === 0}
+                                            sizes="(max-width: 768px) 100vw, 60vw"
                                         />
 
                                         {/* Scanner Line Effect */}

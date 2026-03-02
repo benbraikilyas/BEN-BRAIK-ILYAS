@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion"
 import { useState, useEffect, useRef } from "react";
 import { SITE_CONFIG, NAV_LINKS } from "@/lib/constants";
 import { EASE_EXPO } from "@/lib/animations";
+import Image from "next/image";
 import GooeyNav from "@/components/GooeyNav";
 import MusicPlayer from "@/components/ui/MusicPlayer";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
@@ -67,10 +68,12 @@ export default function Navbar() {
                     data-cursor="pointer"
                 >
                     <div className="relative w-12 h-12 md:w-14 md:h-14 transition-transform duration-500 group-hover:scale-105">
-                        <img
+                        <Image
                             src="/icon.png"
                             alt={SITE_CONFIG.name}
-                            className="w-full h-full object-contain"
+                            fill
+                            className="object-contain"
+                            priority
                         />
                     </div>
                     <span className="font-display text-xl md:text-2xl tracking-widest text-foreground group-hover:text-accent transition-colors duration-300">
