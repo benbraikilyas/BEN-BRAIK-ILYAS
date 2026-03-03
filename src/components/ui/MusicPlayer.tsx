@@ -20,6 +20,7 @@ interface MusicPlayerProps {
 export default function MusicPlayer({ className = "fixed bottom-8 left-8 z-50", minimal = false }: MusicPlayerProps) {
     const [isPlaying, setIsPlaying] = useState(false);
     const [player, setPlayer] = useState<any>(null);
+    const [isPlayerReady, setIsPlayerReady] = useState(false);
 
     const playerRef = useRef<HTMLDivElement>(null);
 
@@ -34,19 +35,19 @@ export default function MusicPlayer({ className = "fixed bottom-8 left-8 z-50", 
             // Prevent multiple iframes
             if (playerRef.current.querySelector('iframe')) return;
 
-            console.log("Initializing YouTube Player...");
+            console.log("Initializing YouTube Player instance...");
 
             playerInstance = new window.YT.Player(playerRef.current, {
                 height: "0",
                 width: "0",
                 videoId: SITE_CONFIG.youtubeId,
-                host: "https://www.youtube-nocookie.com",
+                host: "https://www.youtube.com",
                 playerVars: {
                     autoplay: 0,
                     controls: 0,
                     loop: 1,
                     playlist: SITE_CONFIG.youtubeId,
-                    origin: window.location.origin,
+                    origin: typeof window !== 'undefined' ? window.location.origin : '',
                     enablejsapi: 1,
                     modestbranding: 1,
                     rel: 0,
@@ -54,41 +55,48 @@ export default function MusicPlayer({ className = "fixed bottom-8 left-8 z-50", 
                 events: {
                     onReady: (event: any) => {
                         if (isMounted) {
-                            console.log("YouTube Player Ready");
+                            console.log("YouTube Player is fully attached and Ready");
                             setPlayer(event.target);
+                            setIsPlayerReady(true);
                         }
                     },
+                    onStateChange: (event: any) => {
+                        // Keep track of sync if needed
+                    },
                     onError: (e: any) => {
-                        console.error("YouTube Player Error:", e.data);
+                        console.error("YouTube Player API Error:", e.data);
                     }
                 },
             });
         };
 
         const loadYT = () => {
+            // Check if script already exists
+            const existingScript = document.getElementById("youtube-api-script");
+
             if (window.YT && window.YT.Player) {
-                // Already loaded, but wait a bit for DOM stability
-                initTimeout = setTimeout(initPlayer, 500);
-            } else {
-                // Not loaded yet
-                if (!document.getElementById("youtube-api-script")) {
-                    const tag = document.createElement("script");
-                    tag.id = "youtube-api-script";
-                    tag.src = "https://www.youtube.com/iframe_api";
-                    const firstScriptTag = document.getElementsByTagName("script")[0];
-                    if (firstScriptTag && firstScriptTag.parentNode) {
-                        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                    }
+                initTimeout = setTimeout(initPlayer, 300);
+            } else if (!existingScript) {
+                const tag = document.createElement("script");
+                tag.id = "youtube-api-script";
+                tag.src = "https://www.youtube.com/iframe_api";
+                const firstScriptTag = document.getElementsByTagName("script")[0];
+                if (firstScriptTag && firstScriptTag.parentNode) {
+                    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
                 }
 
-                // Global callback for the script
-                const oldCallback = window.onYouTubeIframeAPIReady;
                 window.onYouTubeIframeAPIReady = () => {
-                    if (oldCallback) oldCallback();
-                    if (isMounted) {
-                        initTimeout = setTimeout(initPlayer, 500);
-                    }
+                    if (isMounted) initPlayer();
                 };
+            } else {
+                // Script is loading, poll for YT
+                const pollYT = setInterval(() => {
+                    if (window.YT && window.YT.Player) {
+                        clearInterval(pollYT);
+                        if (isMounted) initPlayer();
+                    }
+                }, 100);
+                setTimeout(() => clearInterval(pollYT), 5000); // Timeout poll
             }
         };
 
@@ -104,14 +112,21 @@ export default function MusicPlayer({ className = "fixed bottom-8 left-8 z-50", 
     }, []);
 
     const togglePlay = () => {
-        if (!player) return;
+        if (!player || !isPlayerReady) {
+            console.warn("Interaction blocked: YouTube Player not yet ready.");
+            return;
+        }
 
-        if (isPlaying) {
-            player.pauseVideo();
-            setIsPlaying(false);
-        } else {
-            player.playVideo();
-            setIsPlaying(true);
+        try {
+            if (isPlaying) {
+                player.pauseVideo();
+                setIsPlaying(false);
+            } else {
+                player.playVideo();
+                setIsPlaying(true);
+            }
+        } catch (err) {
+            console.error("Failed to communicate with YouTube Player:", err);
         }
     };
 
@@ -121,9 +136,9 @@ export default function MusicPlayer({ className = "fixed bottom-8 left-8 z-50", 
                 Use an invisible but present container rather than display:none.
                 This ensures the Iframe API can safely execute postMessage calls.
             */}
-            <div 
-                ref={playerRef} 
-                className="fixed bottom-0 left-0 w-0 h-0 opacity-0 pointer-events-none -z-50" 
+            <div
+                ref={playerRef}
+                className="fixed bottom-0 left-0 w-0 h-0 opacity-0 pointer-events-none -z-50"
                 aria-hidden="true"
             />
 

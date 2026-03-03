@@ -96,7 +96,13 @@ export default function Hero() {
                             className="w-12 h-12 rounded-full border border-border flex items-center justify-center hover:bg-accent hover:border-accent transition-all duration-300 group cursor-pointer will-change-transform"
                             animate={{ y: [0, 8, 0] }}
                             transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-                            onClick={() => window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })}
+                            onClick={() => {
+                                if ((window as any).lenis) {
+                                    (window as any).lenis.scrollTo(window.innerHeight, { duration: 1.5 });
+                                } else {
+                                    window.scrollTo({ top: window.innerHeight, behavior: 'smooth' });
+                                }
+                            }}
                         >
                             <ArrowDown className="w-4 h-4 text-foreground group-hover:text-background" />
                         </motion.div>
