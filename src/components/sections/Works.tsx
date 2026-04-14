@@ -36,8 +36,15 @@ const PROJECTS = [
         id: "p4",
         title: "Dog Care Platform",
         category: "Full-Stack Development",
-        image: "/HJJ.PNG",
+        image: "/p1.PNG",
         description: "MyDog — an AI-assisted dog care guide with features such as a breed encyclopedia, medical info, vet locator and an AI chat assistant. The project was built with React + Vite and uses Tailwind classes in the components."
+    },
+    {
+        id: "p5",
+        title: "Action Bags Store",
+        category: "E-Commerce Platform",
+        image: "/P5.PNG",
+        description: "A premium e-commerce platform for minimalist water-resistant backpacks. Features a seamless shopping experience customized for the Moroccan market, optimized for SEO and conversion."
     },
 ];
 

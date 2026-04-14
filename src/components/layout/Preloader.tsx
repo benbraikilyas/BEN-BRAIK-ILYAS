@@ -11,7 +11,7 @@ export default function Preloader({ onCompleteAction }: { onCompleteAction: () =
 
     useEffect(() => {
         // Simulate loading progress
-        const duration = 1400;
+        const duration = 400;
         const start = Date.now();
 
         const tick = () => {
