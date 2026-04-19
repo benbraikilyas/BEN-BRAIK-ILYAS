@@ -21,7 +21,7 @@ export const SITE_CONFIG: SiteConfig = {
     tagline: "Engineering Progress",
     email: "benbraikilyas9@gmail.com",
     year: 2026,
-    url: "https://benbraikilyas.vercel.app", // REPLACE with your actual domain (e.g., https://benbraikilyas.com)
+    url: "https://benbraikilyas.online",
     youtubeId: "Z-VfaG9ZN_U",
 } as const;
 

@@ -59,7 +59,7 @@ export const metadata: Metadata = {
     siteName: SITE_CONFIG.fullName,
     images: [
       {
-        url: "/icon.png", 
+        url: "/icon.png",
         width: 1200,
         height: 630,
         alt: `${SITE_CONFIG.fullName} Portfolio Preview`,
@@ -75,7 +75,7 @@ export const metadata: Metadata = {
     images: ["/icon.png"],
   },
   verification: {
-    google: "YOUR_GOOGLE_VERIFICATION_CODE_HERE", // User needs to replace this
+    google: "y9wml7O0KLwyX2X8EExgZwiVb7R1k7t1MKkV7ajHgG0",
   },
   robots: {
     index: true,
