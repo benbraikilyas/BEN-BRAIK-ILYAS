@@ -113,6 +113,7 @@ const jsonLd = {
 
 
 import GradualBlur from "@/components/animations/GradualBlur";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function RootLayout({
   children,
@@ -153,6 +154,7 @@ export default function RootLayout({
             <div className="grain-overlay" />
             <Cursor />
             {children}
+            <Analytics />
             <GradualBlur position="bottom" height="6rem" strength={2} />
           </main>
         </Providers>
