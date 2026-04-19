@@ -1,0 +1,21 @@
+{
+  "name": "BENBRAIK ILYAS | Full-Stack Developer",
+  "short_name": "ILYAS Portfolio",
+  "description": "Official portfolio of BENBRAIK ILYAS. Specialized in cinematic React animations and advanced Next.js interactive experiences.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

@@ -36,11 +36,78 @@ export const metadata: Metadata = {
     "Interactive UI/UX Designer",
     "Creative Coding",
     "Software Engineer Portfolio",
+    "Digital Craftsman",
+    "Web Performance Specialist",
+    "Cinematic UI",
   ],
+  authors: [{ name: SITE_CONFIG.fullName, url: SITE_CONFIG.url }],
+  creator: SITE_CONFIG.fullName,
+  publisher: SITE_CONFIG.fullName,
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
+  metadataBase: new URL(SITE_CONFIG.url),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: `${SITE_CONFIG.fullName} | Full-Stack Developer`,
+    description: `Exploring the intersection of cinematic design and advanced web performance.`,
+    url: SITE_CONFIG.url,
+    siteName: SITE_CONFIG.fullName,
+    images: [
+      {
+        url: "/icon.png", 
+        width: 1200,
+        height: 630,
+        alt: `${SITE_CONFIG.fullName} Portfolio Preview`,
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `${SITE_CONFIG.fullName} | Full-Stack Developer`,
+    description: `Exploring the intersection of cinematic design and advanced web performance.`,
+    images: ["/icon.png"],
+  },
+  verification: {
+    google: "YOUR_GOOGLE_VERIFICATION_CODE_HERE", // User needs to replace this
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
   icons: {
     icon: "/icon.png",
     apple: "/icon.png",
+    shortcut: "/icon.png",
   },
+  manifest: "/manifest.json",
+};
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: SITE_CONFIG.fullName,
+  url: SITE_CONFIG.url,
+  jobTitle: "Full-Stack Developer",
+  sameAs: [
+    "https://github.com/BENBRAIKILYAS",
+    "https://www.linkedin.com/in/benbraikilyas/",
+    "https://www.instagram.com/iilyass_benbraik/",
+  ],
+  description: `Official portfolio of ${SITE_CONFIG.fullName}. Specialized in high-performance Full-Stack development, cinematic React animations, and advanced Next.js interactive experiences.`,
 };
 
 
@@ -56,6 +123,10 @@ export default function RootLayout({
     <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
         {/* 
           This MUST run synchronously before hydration.
           It disables browser scroll restoration and resets scroll to top
