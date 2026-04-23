@@ -50,7 +50,7 @@ export const metadata: Metadata = {
   },
   metadataBase: new URL(SITE_CONFIG.url),
   alternates: {
-    canonical: "/",
+    canonical: SITE_CONFIG.url,
   },
   openGraph: {
     title: `${SITE_CONFIG.fullName} | Full-Stack Developer`,
